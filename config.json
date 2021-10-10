@@ -1,0 +1,8 @@
+{
+    "database": {
+        "type": "sqlite",
+        "file": "./sqlite.db"
+    },
+    "server_secret": "b6dc8617-006c-48e8-805f-77c58bb63cf4",
+    "salt": "da087361-920b-4d43-b77b-8bf63fbe190d"
+}
