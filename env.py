@@ -42,5 +42,20 @@ def load_config() -> None:
 
     # init database if not
     if not db.get_tables():
-        from model import User
-        database.create_tables([User])
+        from model import Class, User, Score, Permission
+        database.create_tables([Class, User, Score, Permission])
+
+        # Create admin user
+        from random import randint
+        from user import _hash_password
+        from model import UserState
+        email = "admin@cahcps-system.local"
+        password = "guess_this"
+        # password = hex(randint(1 << 60, (1 << 64) - 1))[2:]
+        User.create(email=email, password=_hash_password(password), name="SYSADMIN", state=UserState.sysadmin)
+        print("===========================================")
+        print("           SysAdmin user created           ")
+        print()
+        print("Email:   ", email)
+        print("Password:", password)
+        print("===========================================")

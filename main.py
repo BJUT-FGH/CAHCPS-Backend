@@ -1,5 +1,5 @@
 import functools
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel
 from fastapi import FastAPI, Query, Request
 
@@ -7,6 +7,7 @@ import env
 env.load_config()
 
 import user
+import admin
 
 # Wrapper to return error message when ValueError
 def _std_error_handler(func):
@@ -19,34 +20,66 @@ def _std_error_handler(func):
     return inner
 
 
+student_id_t = Query(..., regex=r"^\d{8}$")
+password_t = Query(..., min_length=3)
+email_t = Query(..., regex=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+name_t = Query(..., regex=r"^[\u4e00-\u9fa5]{2,8}$")
+email_or_student_id_t = Query(..., regex=r"^\d{8}$|^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+
 # FastAPI Route defines begin
 app = FastAPI()
 
 
-# Homepage
+# - Homepage
 @app.get("/")
 @_std_error_handler
 def welcome():
     raise ValueError("welcome to College-wide Academic and Honors Cyber Profile System (CAHCPS) backend API endpoint, API access only")
 
 
-# User Register
-class User(BaseModel):
-    email: str = Query(..., regex=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
-    password: str = Query(..., min_length=3)
+# - User Login
+class UserLoginReq(BaseModel):
+    email_or_student_id: str = email_or_student_id_t
+    password: str = password_t
 
-class UserRegister(User):
-    username: str = Query(..., regex=r"^[0-9a-zA-Z_]{3,64}$")
-
-@app.post("/user/register")
+@app.put("/user/login")
 @_std_error_handler
-def user_register(reg: UserRegister):
-    return user.register(reg.email, reg.password, reg.username)
+def _(p: UserLoginReq):
+    return user.login(p.email_or_student_id, p.password)
 
 
-# User Login
-@app.post("/user/login")
+# - User Register (Pre-add student only)
+class UserRegisterReq(BaseModel):
+    student_id: str = student_id_t
+    password: str = password_t
+    email: str = email_t
+    name: str = name_t
+
+@app.put("/user/register")
 @_std_error_handler
-def user_login(login: User):
-    return user.login(login.email, login.password)
+def _(p: UserRegisterReq):
+    return user.register(p.student_id, p.password, p.email, p.name)
 
+
+# - Student User Pre-add
+class StudentAddReq(BaseModel):
+    class_id: int
+    class Item(BaseModel):
+        student_id: str = student_id_t
+        name: str = name_t
+    student_list: List[Item]
+
+@app.post("/admin/students")
+@_std_error_handler
+def _(token: str, p: StudentAddReq):
+    return admin.student_add(token, p.class_id, p.student_list)
+
+
+# - Class Add
+class ClassAddReq(BaseModel):
+    name: str
+
+@app.post("/admin/classes")
+@_std_error_handler
+def _(token: str, p: ClassAddReq):
+    return admin.class_add(token, p.name)
