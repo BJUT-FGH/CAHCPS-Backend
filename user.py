@@ -17,9 +17,9 @@ def _login(email_or_student_id: str, password: str) -> UID:
     password_hash = _hash_password(password)
     try:
         if '@' in email_or_student_id:
-            user = User.get((User.email == email_or_student_id) & (User.password == password_hash))
+            user = User.get(User.email == email_or_student_id, User.password == password_hash)
         else:
-            user = User.get((User.student_id == email_or_student_id) & (User.password == password_hash))
+            user = User.get(User.student_id == email_or_student_id, User.password == password_hash)
     except User.DoesNotExist:
         raise ValueError("_login(): Email/Student_ID or Password incorrect")
     return user.uid
@@ -35,7 +35,7 @@ def login(email_or_student_id: str, password: str):
     encoded_jwt = jwt.encode(
         {
             "uid": uid,
-            "exp": int(time.time()) + 3600*6 * 1000
+            "exp": int(time.time()) + 3600*24*30
         },
         config['server_secret'], algorithm="HS256"
     )
@@ -43,7 +43,7 @@ def login(email_or_student_id: str, password: str):
 
 def register(student_id: str, password: str, email: str, name: str):
     try:
-        user = User.get((User.student_id == student_id) & (User.name == name))
+        user = User.get(User.student_id == student_id, User.name == name)
     except User.DoesNotExist:
         raise ValueError("register(): Verify failed")
     if user.state != UserState.unregistered:

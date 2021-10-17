@@ -61,6 +61,17 @@ def _(p: UserRegisterReq):
     return user.register(p.student_id, p.password, p.email, p.name)
 
 
+# - User Modify Password
+class UserModifyPassword(BaseModel):
+    old_password: str = password_t
+    new_password: str = password_t
+
+@app.put("/user/password")
+@_std_error_handler
+def _(token: str, p: UserModifyPassword):
+    return user.modify_password(token, p.old_password, p.new_password)
+
+
 # - Student User Pre-add
 class StudentAddReq(BaseModel):
     class_id: int
@@ -75,6 +86,13 @@ def _(token: str, p: StudentAddReq):
     return admin.student_add(token, p.class_id, p.student_list)
 
 
+# - Student List
+@app.get("/admin/students")
+@_std_error_handler
+def _(token: str, class_id: int = None):
+    return admin.student_list(token, class_id)
+
+
 # - Class Add
 class ClassAddReq(BaseModel):
     name: str
@@ -84,13 +102,3 @@ class ClassAddReq(BaseModel):
 def _(token: str, p: ClassAddReq):
     return admin.class_add(token, p.name)
 
-
-# - Class Add
-class UserModifyPassword(BaseModel):
-    old_password: str = password_t
-    new_password: str = password_t
-
-@app.put("/user/password")
-@_std_error_handler
-def _(token: str, p: UserModifyPassword):
-    return user.modify_password(token, p.old_password, p.new_password)

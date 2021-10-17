@@ -30,7 +30,7 @@ def load_config() -> None:
                 if not conf_db.get(x):
                     raise ValueError("load_condig(): '%s' is needed for MySQL db condig" % x)
             database = MySQLDatabase(
-                conf_db['dbname'], host=conf_db['host'], 
+                conf_db['dbname'], host=conf_db['host'],
                 user=conf_db['user'], passwd=conf_db['password'])
             database.connect()
         else:
