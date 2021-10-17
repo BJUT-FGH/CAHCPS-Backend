@@ -83,3 +83,14 @@ class ClassAddReq(BaseModel):
 @_std_error_handler
 def _(token: str, p: ClassAddReq):
     return admin.class_add(token, p.name)
+
+
+# - Class Add
+class UserModifyPassword(BaseModel):
+    old_password: str = password_t
+    new_password: str = password_t
+
+@app.put("/user/password")
+@_std_error_handler
+def _(token: str, p: UserModifyPassword):
+    return user.modify_password(token, p.old_password, p.new_password)

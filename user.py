@@ -41,7 +41,7 @@ def login(email_or_student_id: str, password: str):
     )
     return {"status": "ok", "token": encoded_jwt}
 
-def register(student_id: str, password: str, email: str, name: str) -> None:
+def register(student_id: str, password: str, email: str, name: str):
     try:
         user = User.get((User.student_id == student_id) & (User.name == name))
     except User.DoesNotExist:
@@ -54,4 +54,16 @@ def register(student_id: str, password: str, email: str, name: str) -> None:
     user.email = email
     user.state = UserState.normal
     user.save()
+    return {"status": "ok"}
+
+def modify_password(token, old_password, new_password):
+    uid = _verify_token(token)
+    user = User.get_by_id(uid)
+    old_password_hash = _hash_password(old_password)
+    if old_password_hash == user.password:
+        new_password_hash = _hash_password(new_password)
+        user.password = new_password_hash
+        user.save()
+    else:
+        raise ValueError("modify_password(): old password wrong")
     return {"status": "ok"}

@@ -9,7 +9,7 @@ def load_config() -> None:
     with open("./config.json") as f:
         conf = json.load(f)
         database = None
-        
+
         if not conf.get('server_secret') or len(conf.get('server_secret')) < 36:
             raise ValueError("load_config(): server_secret empty or less then 36 char")
         if not conf.get('salt') or len(conf.get('salt')) < 16:
