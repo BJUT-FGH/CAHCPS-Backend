@@ -1,4 +1,4 @@
-from comments import wisdome_comment, moral_comment, physical_comment, aesthetic_comment, labor_comment
+from utils.comments import wisdome_comment, moral_comment, physical_comment, aesthetic_comment, labor_comment
 
 w_rank_list = ["国际级", "国家级", "省级", "校级", "无"]
 w_rank_score = [90, 80, 50, 30, 0]

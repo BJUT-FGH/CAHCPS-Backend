@@ -38,9 +38,7 @@ def student_list(token, class_id):
             or user.state == UserState.sysadmin
         ):
             raise ValueError("student_add(): permission denied")
-        print(class_id)
         query = User.select().where(User.student_id != "", User.class_id_id == class_id)
-        print(query)
     else:
         if user.state != UserState.sysadmin:
             raise ValueError("student_add(): permission denied")

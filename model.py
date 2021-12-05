@@ -1,6 +1,5 @@
-from typing import Text
 from peewee import *
-from enum import IntEnum, unique
+from enum import IntEnum
 from env import db
 
 class _BaseModel(Model):
@@ -19,6 +18,13 @@ class PermissionType(IntEnum):
     readonly = 1
     readwrite = 2
 
+class SubjectType(IntEnum):
+    unknown = 0
+    basic = 1
+    professional = 2
+    public = 3
+    other = 4
+
 # Tables
 class Class(_BaseModel):
     class_id = AutoField()
@@ -34,12 +40,18 @@ class User(_BaseModel):
     student_id = CharField(null=True, unique=True)
     class_id = ForeignKeyField(Class, null=True)
 
-class Score(_BaseModel):
+class Subject(_BaseModel):
+    subject_id = AutoField()
+    type = IntegerField()
+    name = CharField(unique=True)
+    credit = FloatField()
+
+class Grade(_BaseModel):
     uid = ForeignKeyField(User, on_delete='CASCADE')
-    subject = CharField()
+    subject_id = ForeignKeyField(User, on_delete='CASCADE')
     score = FloatField()
     class Meta:
-        primary_key = CompositeKey('uid', 'subject')
+        primary_key = CompositeKey('uid', 'subject_id')
 
 class Permission(_BaseModel):
     class_id = ForeignKeyField(Class, on_delete='CASCADE')

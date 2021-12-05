@@ -42,8 +42,8 @@ def load_config() -> None:
 
     # init database if not
     if not db.get_tables():
-        from model import Class, User, Score, Permission
-        database.create_tables([Class, User, Score, Permission])
+        from model import Class, User, Grade, Subject, Permission
+        database.create_tables([Class, User, Grade, Subject, Permission])
 
         # Create admin user
         from random import randint

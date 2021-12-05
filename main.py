@@ -8,6 +8,7 @@ env.load_config()
 
 import user
 import admin
+import grade
 
 # Wrapper to return error message when ValueError
 def _std_error_handler(func):
@@ -25,6 +26,7 @@ password_t = Query(..., min_length=3)
 email_t = Query(..., regex=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
 name_t = Query(..., regex=r"^[\u4e00-\u9fa5]{2,8}$")
 email_or_student_id_t = Query(..., regex=r"^\d{8}$|^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+subject_name_t = Query(..., regex=r"^.{1,64}$") # Note: do HTML escape later
 
 # FastAPI Route defines begin
 app = FastAPI()
@@ -101,4 +103,29 @@ class ClassAddReq(BaseModel):
 @_std_error_handler
 def _(token: str, p: ClassAddReq):
     return admin.class_add(token, p.name)
+
+# - Upload Student Grade (add/update)
+class UploadStudentGrade(BaseModel):
+    class Item(BaseModel):
+        subject_name: str = subject_name_t
+        score: float
+    grade_list: List[Item]
+
+@app.post("/student/{student_id}/grades")
+@_std_error_handler
+def _(token: str, student_id: int, p: UploadStudentGrade):
+    return grade.student_grade_add_update(token, student_id, p.grade_list)
+
+# - List Student Grade
+@app.post("/student/{student_id}/grades")
+@_std_error_handler
+def _(token: str, student_id: int):
+    return grade.student_grade_list(token, student_id)
+
+# - List Student Grade
+@app.get("/student/{student_id}/advise")
+@_std_error_handler
+def _(token: str, student_id: int):
+    return grade.student_advise(token, student_id)
+
 
