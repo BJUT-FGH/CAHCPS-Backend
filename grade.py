@@ -1,4 +1,4 @@
-from model import Subject, SubjectType, Grade, User, UserState, Permission
+from model import PermissionType, Subject, SubjectType, Grade, User, UserState, Permission
 from user import _verify_token
 
 def _has_student_permission_rw(user, student_id):
@@ -9,13 +9,19 @@ def _has_student_permission_rw(user, student_id):
     if user.state == UserState.sysadmin:
         return True
     if user.state == UserState.operator:
-        return bool(Permission.get_or_none(Permission.uid == user.uid, Permission.class_id == student.class_id_id))
+        return Permission.get_or_none(Permission.uid == user.uid, Permission.class_id == student.class_id_id) == PermissionType.readwrite
     return False
 
 def _has_student_permission_r(user, student_id):
-    if _has_student_permission_rw(user, student_id):
+    student = User.get_by_id(student_id)
+    if not student:
+        return False
+
+    if user.state == UserState.sysadmin:
         return True
-    return user.uid == student_id
+    if user.state == UserState.operator:
+        return Permission.get_or_none(Permission.uid == user.uid, Permission.class_id == student.class_id_id) >= PermissionType.readonly
+    return False
 
 def student_grade_add_update(token, student_id, grade_list):
     uid = _verify_token(token)

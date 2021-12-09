@@ -23,7 +23,9 @@ class SubjectType(IntEnum):
     basic = 1
     professional = 2
     public = 3
-    other = 4
+    pe = 4
+    pe_test = 5
+    other = 6
 
 # Tables
 class Class(_BaseModel):

@@ -1,5 +1,5 @@
 from peewee import IntegrityError
-from model import Class, User, UserState, Permission
+from model import Class, PermissionType, User, UserState, Permission
 from user import _verify_token
 
 def student_add(token, class_id, student_list):
@@ -7,7 +7,7 @@ def student_add(token, class_id, student_list):
     user = User.get_by_id(uid)
     if not (
         user.state == UserState.operator
-            and Permission.get_or_none(Permission.uid == uid, Permission.class_id == class_id)
+            and Permission.get_or_none(Permission.uid == uid, Permission.class_id == class_id) == PermissionType.readwrite
         or user.state == UserState.sysadmin
     ):
         raise ValueError("student_add(): permission denied")
@@ -34,7 +34,7 @@ def student_list(token, class_id):
     if class_id:
         if not (
             user.state == UserState.operator
-            and Permission.get_or_none(Permission.uid == uid, Permission.class_id == class_id)
+            and Permission.get_or_none(Permission.uid == uid, Permission.class_id == class_id) >= PermissionType.readonly
             or user.state == UserState.sysadmin
         ):
             raise ValueError("student_add(): permission denied")

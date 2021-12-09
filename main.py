@@ -2,6 +2,7 @@ import functools
 from typing import List, Optional
 from pydantic import BaseModel
 from fastapi import FastAPI, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 import env
 env.load_config()
@@ -31,6 +32,13 @@ subject_name_t = Query(..., regex=r"^.{1,64}$") # Note: do HTML escape later
 # FastAPI Route defines begin
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # - Homepage
 @app.get("/")
