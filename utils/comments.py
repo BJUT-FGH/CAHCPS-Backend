@@ -71,3 +71,10 @@ def academic_excellence_award_comments(is_award):
     else:
         return "你在本学期无法获得学术卓越奖，你需要拥有樊恭烋荣誉学院奖学金评定条例上的论文或专利。"
 
+
+def compare_subject_comments(user1_name, user2_name, user1_subject_score, user2_subject_score, subject):
+    diff = abs(user1_subject_score - user2_subject_score)
+    if user1_subject_score < user2_subject_score:
+        return user1_name + subject + "成绩比" + user2_name + "低" + str(diff)
+    else:
+        return user1_name + subject + "成绩比" + user2_name + "高" + str(diff)
