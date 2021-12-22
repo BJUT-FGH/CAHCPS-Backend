@@ -37,7 +37,7 @@ def student_grade_add_update(token, student_uid, grade_list):
     for item in grade_list:
         subject_id = Subject.get_or_none(Subject.name == item.subject_name)
         if not subject_id:
-            subject_id = Subject.create(type=SubjectType.unknown, name=item.subject_name).subject_id
+            subject_id = Subject.create(type=item.subject_type, name=item.subject_name).subject_id
 
         grade = Grade.get_or_none(Grade.uid == student_uid, Grade.subject_id == subject_id)
         if grade:
