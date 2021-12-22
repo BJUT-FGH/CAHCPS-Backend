@@ -43,3 +43,24 @@ def labor_comment(score):
         return "感谢你对集体，学生们做出的贡献，你在劳育的部分做的非常棒了，希望你能够平衡好学生工作与生活还有学业上的时间。"
     else:
         return "在大学期间可以适当参加学生工作，丰富自己的经历！"
+
+
+
+
+
+
+
+def learning_award_comments(rank):
+    if rank <= 6:
+        return "你的排名是：" + str(rank) + "你可以获得校学习优秀奖。成绩不错，明年继续加油！"
+    else:
+        diff = rank - 6
+        return "你的排名是：" + str(rank) + "你离参评校学习优秀奖还差" + str(diff) + "名，明年加油！"
+
+
+def innovation_award_comments(is_award):
+    if is_award == True:
+        return "你在本学期可以获得创新创业奖。"
+    else:
+        return "你在本学期无法获得创新创业奖，你需要参加学校认定的学科竞赛或者发表论文，专利等。"
+
