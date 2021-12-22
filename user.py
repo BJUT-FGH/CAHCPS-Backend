@@ -21,14 +21,14 @@ def _login(email_or_student_id: str, password: str) -> UID:
         else:
             user = User.get(User.student_id == email_or_student_id, User.password == password_hash)
     except User.DoesNotExist:
-        raise ValueError("_login(): Email/Student_ID or Password incorrect")
+        raise ValueError("Email/Student_ID or Password incorrect")
     return user.uid
 
 def _verify_token(token: str) -> UID:
     try:
         return jwt.decode(token, config['server_secret'], algorithms="HS256")['uid']
     except jwt.InvalidTokenError:
-        raise ValueError("_verify_token(): token error")
+        raise ValueError("token error")
 
 def login(email_or_student_id: str, password: str):
     uid = _login(email_or_student_id, password)
@@ -45,11 +45,11 @@ def register(student_id: str, password: str, email: str, name: str):
     try:
         user = User.get(User.student_id == student_id, User.name == name)
     except User.DoesNotExist:
-        raise ValueError("register(): Verify failed")
+        raise ValueError("Verify failed")
     if user.state != UserState.unregistered:
-        raise ValueError("register(): Verify failed")
+        raise ValueError("Verify failed")
     if User.get_or_none(User.email == email):
-        raise ValueError("register(): Email already exist")
+        raise ValueError("Email already exist")
     user.password = _hash_password(password)
     user.email = email
     user.state = UserState.normal
@@ -65,5 +65,5 @@ def modify_password(token, old_password, new_password):
         user.password = new_password_hash
         user.save()
     else:
-        raise ValueError("modify_password(): old password wrong")
+        raise ValueError("old password wrong")
     return {"status": "ok"}

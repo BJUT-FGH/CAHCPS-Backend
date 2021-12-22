@@ -1,8 +1,10 @@
 import json
 from peewee import SqliteDatabase, MySQLDatabase
 
+
 config = None
 db = None
+
 
 def load_config() -> None:
     global config, db
@@ -42,8 +44,8 @@ def load_config() -> None:
 
     # init database if not
     if not db.get_tables():
-        from model import Class, User, Grade, Subject, Permission
-        database.create_tables([Class, User, Grade, Subject, Permission])
+        from model import Class, User, Grade, Subject, Permission, Award
+        database.create_tables([Class, User, Grade, Subject, Permission, Award])
 
         # Create admin user
         from random import randint
