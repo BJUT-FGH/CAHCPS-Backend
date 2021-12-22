@@ -64,3 +64,10 @@ def innovation_award_comments(is_award):
     else:
         return "你在本学期无法获得创新创业奖，你需要参加学校认定的学科竞赛或者发表论文，专利等。"
 
+
+def academic_excellence_award_comments(is_award):
+    if is_award == True:
+        return "你在本学期可以获得学术卓越奖"
+    else:
+        return "你在本学期无法获得学术卓越奖，你需要拥有樊恭烋荣誉学院奖学金评定条例上的论文或专利。"
+

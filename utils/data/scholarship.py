@@ -4,7 +4,7 @@ import is_innovation
 import is_academic
 
 from comments import learning_award_comments
-from utils.comments import innovation_award_comments
+from utils.comments import academic_excellence_award_comments, innovation_award_comments
 
 
 def init_limit(person_name):
@@ -27,4 +27,4 @@ def innovation_award(user_id):
 
 def academic_excellence_award(user_id):
     is_award = is_academic(user_id)
-    return 
+    return academic_excellence_award_comments(is_award)
