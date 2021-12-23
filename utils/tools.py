@@ -1,5 +1,4 @@
 from model import *
-from utils.comments import composite_comments
 
 
 def get_user_name(user_id):
@@ -129,7 +128,3 @@ def _generate_comments_intro(user_id):
     args['class_num'] = _get_class_num(class_id)
     args['rank'] = get_rank_from_class(user_id)
     return args
-
-
-def sum_up(user_id):
-    return composite_comments(user_id)
