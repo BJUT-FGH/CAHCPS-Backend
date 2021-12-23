@@ -116,6 +116,12 @@ def get_all_arbitrary_credit(user_id):
     return arbitrary_credit
 
 
+def get_all_general_elective_subject_credit(user_id):
+    all_grade = _get_all_grade_w_weight(user_id)
+    general_elective_subject_credit = _calc_credit_from_type(all_grade, SubjectType.通识教育选修课)
+    return general_elective_subject_credit
+
+
 def _get_class_num(class_id):
     class_user_id = _get_class_list_user_id(class_id)
     return len(class_user_id)

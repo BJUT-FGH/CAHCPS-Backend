@@ -1,4 +1,4 @@
-from utils.tools import get_all_credit, get_all_limited_credit, get_all_arbitrary_credit
+from utils.tools import get_all_credit, get_all_limited_credit, get_all_arbitrary_credit, get_all_general_elective_subject_credit
 
 
 def check_graduate(user_id):
@@ -17,3 +17,10 @@ def check_arbitrary_major_subject_credict(user_id):
     from utils.comments import check_arbitrary_major_subject_credict_comments
     arbitrary_credit = get_all_arbitrary_credit(user_id)
     return check_arbitrary_major_subject_credict_comments(arbitrary_credit)
+
+
+def check_general_elective_subject_credict(user_id):
+    from utils.comments import check_arbitrary_major_subject_credict_comments
+    general_elective_subject_credict = get_all_general_elective_subject_credit(user_id)
+    return get_all_general_elective_subject_credit(general_elective_subject_credict)
+    

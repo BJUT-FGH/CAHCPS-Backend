@@ -1,6 +1,6 @@
 from utils.tools import _generate_comments_intro
 from utils.data.scholarship import learning_award, innovation_award
-from utils.data.credit import check_graduate, check_limited_major_subject_credict, check_arbitrary_major_subject_credict
+from utils.data.credit import check_graduate, check_limited_major_subject_credict, check_arbitrary_major_subject_credict, check_general_elective_subject_credict
 
 
 def wisdome_comment(score):
@@ -89,16 +89,23 @@ def check_graduate_comments(all_credicts):
 
 def check_limited_major_subject_credict_comments(limited_credit):
     if limited_credit < 6:
-        return "你的已修专业限选课的分数为" + str(limited_credit) + "，需要再修" + str(6 - limited_credit) + "学分。"
+        return "你的已修专业限选课的学分为" + str(limited_credit) + "，需要再修" + str(6 - limited_credit) + "学分。"
     else:
-        return "你的已修专业限选课的分数为" + str(limited_credit) + "，已满足樊恭烋荣誉学院专业限选课培养计划。"
+        return "你的已修专业限选课的学分为" + str(limited_credit) + "，已满足樊恭烋荣誉学院专业限选课培养计划。"
 
 
 def check_arbitrary_major_subject_credict_comments(arbitrary_credit):
     if arbitrary_credit < 4:
-        return "你的已修专业任选课的分数为" + str(arbitrary_credit) + "，需要再修" + str(4 - arbitrary_credit) + "学分。"
+        return "你的已修专业任选课的学分为" + str(arbitrary_credit) + "，需要再修" + str(4 - arbitrary_credit) + "学分。"
     else:
-        return "你的已修专业任选课的分数为" + str(arbitrary_credit) + "，已满足樊恭烋荣誉学院专业任选课培养计划。"
+        return "你的已修专业任选课的学分为" + str(arbitrary_credit) + "，已满足樊恭烋荣誉学院专业任选课培养计划。"
+
+
+def check_general_elective_subject_credict_comments(general_elective_subject_credict):
+    if general_elective_subject_credict < 8:
+        return "你的已修通识教育选修课的学分为" + str(general_elective_subject_credict) + "，需要再修" + str(8 - general_elective_subject_credict) + "学分。"
+    else:
+        return "你的已修通识教育选修课的学分为" + str(general_elective_subject_credict) + "，已满足樊恭烋荣誉学院通识教育选修课培养计划。"
 
 
 def composite_comments_intro(args):
@@ -111,7 +118,8 @@ def composite_comments_award(user_id):
 
 
 def composite_comments_credit(user_id):
-    return check_graduate(user_id) + check_limited_major_subject_credict(user_id) + check_arbitrary_major_subject_credict(user_id)
+    return check_graduate(user_id) + check_limited_major_subject_credict(user_id) + check_arbitrary_major_subject_credict(user_id) \
+            + check_general_elective_subject_credict(user_id)
 
 
 def composite_comments(user_id):
