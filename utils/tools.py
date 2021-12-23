@@ -83,7 +83,7 @@ def get_rank_from_class(user_id):
     class_weighted_average_score_list.sort(reverse=True)
     all_grade = _get_all_grade_w_weight(user_id)
     user_weighted_average_score = _calc_weighted_average(all_grade)
-    return class_weighted_average_score_list.index(user_weighted_average_score)
+    return class_weighted_average_score_list.index(user_weighted_average_score) + 1
 
 
 def get_pe_test_score(user_id):
