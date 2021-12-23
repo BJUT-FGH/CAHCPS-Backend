@@ -20,7 +20,6 @@ def check_arbitrary_major_subject_credict(user_id):
 
 
 def check_general_elective_subject_credict(user_id):
-    from utils.comments import check_arbitrary_major_subject_credict_comments
+    from utils.comments import check_general_elective_subject_credict_comments
     general_elective_subject_credict = get_all_general_elective_subject_credit(user_id)
-    return get_all_general_elective_subject_credit(general_elective_subject_credict)
-    
+    return check_general_elective_subject_credict_comments(general_elective_subject_credict)

@@ -119,7 +119,7 @@ def composite_comments_award(user_id):
 
 def composite_comments_credit(user_id):
     return check_graduate(user_id) + check_limited_major_subject_credict(user_id) + check_arbitrary_major_subject_credict(user_id) \
-            + check_general_elective_subject_credict_comments(user_id)
+            + check_general_elective_subject_credict(user_id)
 
 
 def composite_comments(user_id):
