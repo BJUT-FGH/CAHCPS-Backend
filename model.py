@@ -96,7 +96,7 @@ class Award(_BaseModel):
 
 class Grade(_BaseModel):
     uid = ForeignKeyField(User, on_delete='CASCADE')
-    subject_id = ForeignKeyField(User, on_delete='CASCADE')
+    subject_id = ForeignKeyField(Subject, on_delete='CASCADE')
     score = FloatField()
     class Meta:
         primary_key = CompositeKey('uid', 'subject_id')

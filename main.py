@@ -12,6 +12,8 @@ env.load_config()
 import user
 import admin
 import grade
+import award
+import student
 
 # Wrapper to return error message when ValueError
 def _std_error_handler(func):
@@ -117,6 +119,13 @@ def _(token: str, p: ClassAddReq):
     return admin.class_add(token, p.name)
 
 
+# - Class list
+@app.get("/admin/classes")
+@_std_error_handler
+def _(token: str):
+    return admin.class_list(token)
+
+
 # - Upload Student Grade (add/update)
 class StudentGradeUploadReq(BaseModel):
     class Item(BaseModel):
@@ -125,24 +134,24 @@ class StudentGradeUploadReq(BaseModel):
         score: float
     grade_list: List[Item]
 
-@app.post("/student/{student_id}/grades")
+@app.post("/student/{student_uid}/grades")
 @_std_error_handler
-def _(token: str, student_id: int, p: StudentGradeUploadReq):
-    return grade.student_grade_add_update(token, student_id, p.grade_list)
+def _(token: str, student_uid: int, p: StudentGradeUploadReq):
+    return grade.student_grade_add_update(token, student_uid, p.grade_list)
 
 
 # - List Student Grade
-@app.get("/student/{student_id}/grades")
+@app.get("/student/{student_uid}/grades")
 @_std_error_handler
-def _(token: str, student_id: int):
-    return grade.student_grade_list(token, student_id)
+def _(token: str, student_uid: int):
+    return grade.student_grade_list(token, student_uid)
 
 
 # - List Student Award
-@app.get("/student/{student_id}/awards")
+@app.get("/student/{student_uid}/awards")
 @_std_error_handler
-def _(token: str, student_id: int):
-    return grade.student_award_list(token, student_id)
+def _(token: str, student_uid: int):
+    return award.student_award_list(token, student_uid)
 
 
 # - Add Student Awards (student/admin)
@@ -153,10 +162,10 @@ class StudentAddAwardReq(BaseModel):
     note: str = Query("", max_length=1000)
     date: int
 
-@app.post("/student/{student_id}/awards")
+@app.post("/student/{student_uid}/awards")
 @_std_error_handler
-def _(token: str, student_id: int, award: StudentAddAwardReq):
-    return grade.student_award_add(token, student_id, award.type, award.level, award.name, award.note, award.date)
+def _(token: str, student_uid: int, p: StudentAddAwardReq):
+    return award.student_award_add(token, student_uid, p.type, p.level, p.name, p.note, p.date)
 
 
 # - Update Student Awards (student/admin)
@@ -169,14 +178,14 @@ class StudentUpdateAwardReq(BaseModel):
     review_status: int = None
     review_note: str = Query(None, max_length=1000)
 
-@app.put("/student/{student_id}/award/{award_id}")
+@app.put("/student/{student_uid}/award/{award_id}")
 @_std_error_handler
-def _(token: str, student_id: int, award_id: int, award_update: StudentUpdateAwardReq):
-    return grade.student_award_update(token, student_id, award_id, award_update)
+def _(token: str, student_uid: int, award_id: int, p: StudentUpdateAwardReq):
+    return award.student_award_update(token, student_uid, award_id, p)
 
 
 # - Get Student Advise (snake.ai)
-@app.get("/student/{student_id}/advise")
+@app.get("/student/{student_uid}/advise")
 @_std_error_handler
-def _(token: str, student_id: int):
-    return grade.student_advise(token, student_id)
+def _(token: str, student_uid: int):
+    return student.student_advise(token, student_uid)

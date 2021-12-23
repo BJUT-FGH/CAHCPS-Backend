@@ -68,3 +68,19 @@ def class_add(token, name):
 
     class_ = Class.create(name=name)
     return {"status": "ok", "class_id": class_.class_id}
+
+
+def class_list(token):
+    uid = _verify_token(token)
+    user = User.get_by_id(uid)
+    if not user.state >= UserState.operator:
+        raise ValueError("permission denied")
+
+    query = Class.select()
+
+    data = [{
+        "class_id": x.class_id,
+        "name": x.name,
+        "note": x.note
+    } for x in query]
+    return {"status": "ok", "student_list": data}
