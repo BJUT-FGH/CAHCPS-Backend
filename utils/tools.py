@@ -34,6 +34,21 @@ def _calc_weighted_average(all_grade):
     return all_score / all_credit
 
 
+def _calc_credit_from_type(all_grade, type):
+    all_credit = 0
+    for g in all_grade:
+        if g['type'] == type:
+            all_credit += g['credit']
+    return all_credit
+
+
+def _calc_all_credit(all_grade):
+    all_credit = 0
+    for g in all_grade:
+        all_credit += g['credit']
+    return all_credit
+
+
 def _get_class_user_id(class_id):
     query = User.select().where(User.student_id != "", User.class_id_id == class_id)
     return [{
@@ -72,3 +87,20 @@ def is_has_innovation(user_id):
 
 def is_has_academic(user_id):
     pass
+
+
+def get_all_credit(user_id):
+    all_grade = _get_all_grade_w_weight(user_id)
+    return _calc_all_credit(all_grade)
+
+
+def get_all_limited_credit(user_id):
+    all_grade = _get_all_grade_w_weight(user_id)
+    limited_credit = _calc_credit_from_type(all_grade, SubjectType.专业限选课)
+    return limited_credit
+
+
+def get_all_arbitrary_credit(user_id):
+    all_grade = _get_all_grade_w_weight(user_id)
+    arbitrary_credit = _calc_credit_from_type(all_grade, SubjectType.专业任选课)
+    return arbitrary_credit

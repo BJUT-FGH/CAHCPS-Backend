@@ -78,3 +78,24 @@ def compare_subject_comments(user1_name, user2_name, user1_subject_score, user2_
         return user1_name + subject + "成绩比" + user2_name + "低" + str(diff)
     else:
         return user1_name + subject + "成绩比" + user2_name + "高" + str(diff)
+
+
+def check_graduate_comments(all_credicts):
+    if all_credicts >= 172:
+        return "你的已修学分为" + str(all_credicts) + "，可以毕业。"
+    else:
+        return "你的已修学分为" + str(all_credicts) + "，不可以毕业，还差" + str(172 - all_credicts) + "学分。"
+
+
+def check_limited_major_subject_credict_comments(limited_credit):
+    if limited_credit < 6:
+        return "你的已修专业限选课的分数为" + str(limited_credit) + "，需要再修" + str(6 - limited_credit) + "学分。"
+    else:
+        return "你的已修专业限选课的分数为" + str(limited_credit) + "，已满足樊恭烋荣誉学院专业限选课培养计划。"
+
+
+def check_arbitrary_major_subject_credict_comments(arbitrary_credit):
+    if arbitrary_credit < 4:
+        return "你的已修专业任选课的分数为" + str(arbitrary_credit) + "，需要再修" + str(4 - arbitrary_credit) + "学分。"
+    else:
+        return "你的已修专业任选课的分数为" + str(arbitrary_credit) + "，已满足樊恭烋荣誉学院专业任选课培养计划。"

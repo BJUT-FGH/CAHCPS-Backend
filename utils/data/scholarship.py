@@ -4,10 +4,7 @@ from utils.comments import learning_award_comments, academic_excellence_award_co
 
 def init_limit(user_id):
     score = get_pe_test_score(user_id)
-    if score < 70:
-        return False
-    else:
-        return True
+    return score >= 70
 
 
 def learning_award(user_id):
