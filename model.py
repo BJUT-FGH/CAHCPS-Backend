@@ -73,6 +73,7 @@ class User(_BaseModel):
     state = IntegerField()
     student_id = CharField(null=True, unique=True)
     class_id = ForeignKeyField(Class, null=True)
+    extra = TextField(null=True)
 
 
 class Subject(_BaseModel):

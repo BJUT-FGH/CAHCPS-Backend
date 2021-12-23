@@ -88,12 +88,31 @@ def _(token: str, p: UserModifyPassword):
     return user.modify_password(token, p.old_password, p.new_password)
 
 
+# - User Self Update
+class UserSelfUpdate(BaseModel):
+    email: str = Query(None, regex=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+    extra: str = Query(None, max_length=10**5)
+
+@app.put("/user/info")
+@_std_error_handler
+def _(token: str, p: UserSelfUpdate):
+    return user.self_update_info(token, p)
+
+
+# - User Get Self Info
+@app.get("/user/info")
+@_std_error_handler
+def _(token: str):
+    return user.get_info(token)
+
+
 # - Student User Pre-add
 class StudentAddReq(BaseModel):
     class_id: int
     class Item(BaseModel):
         student_id: str = student_id_t
         name: str = name_t
+        extra: str = Query("", max_length=10**5)
     student_list: List[Item]
 
 @app.post("/admin/students")

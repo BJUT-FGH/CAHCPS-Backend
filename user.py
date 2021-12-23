@@ -6,11 +6,13 @@ import jwt
 from env import config, db
 from model import User, UserState
 
+
 def _hash_password(password: str) -> str:
     password = config['salt'] + password
     h = sha256()
     h.update(password.encode('utf-8'))
     return h.hexdigest()
+
 
 UID = int
 def _login(email_or_student_id: str, password: str) -> UID:
@@ -24,11 +26,13 @@ def _login(email_or_student_id: str, password: str) -> UID:
         raise ValueError("Email/Student_ID or Password incorrect")
     return user.uid
 
+
 def _verify_token(token: str) -> UID:
     try:
         return jwt.decode(token, config['server_secret'], algorithms="HS256")['uid']
     except jwt.InvalidTokenError:
         raise ValueError("token error")
+
 
 def login(email_or_student_id: str, password: str):
     uid = _login(email_or_student_id, password)
@@ -40,6 +44,7 @@ def login(email_or_student_id: str, password: str):
         config['server_secret'], algorithm="HS256"
     )
     return {"status": "ok", "token": encoded_jwt}
+
 
 def register(student_id: str, password: str, email: str, name: str):
     try:
@@ -56,6 +61,7 @@ def register(student_id: str, password: str, email: str, name: str):
     user.save()
     return {"status": "ok"}
 
+
 def modify_password(token, old_password, new_password):
     uid = _verify_token(token)
     user = User.get_by_id(uid)
@@ -67,3 +73,29 @@ def modify_password(token, old_password, new_password):
     else:
         raise ValueError("old password wrong")
     return {"status": "ok"}
+
+
+def self_update_info(token, info_update):
+    uid = _verify_token(token)
+    user = User.get_by_id(uid)
+    for k, v in info_update:
+        if v is not None:
+            setattr(user, k, v)
+    user.save()
+
+    return {"status": "ok"}
+
+
+def get_info(token):
+    uid = _verify_token(token)
+    user = User.get_by_id(uid)
+    data = {
+        "email": user.email,
+        "name": user.name,
+        "state": user.state,
+        "student_id": user.student_id,
+        "class_id": user.class_id,
+        "extra": user.extra
+    }
+
+    return {"status": "ok", "info": data}

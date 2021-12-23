@@ -20,7 +20,7 @@ def student_add(token, class_id, student_list):
     failed = []
     for item in student_list:
         try:
-            User.create(student_id=item.student_id, name=item.name, class_id=class_id, state=UserState.unregistered)
+            User.create(student_id=item.student_id, name=item.name, extra=item.extra, class_id=class_id, state=UserState.unregistered)
         except IntegrityError:
             failed.append(item)
 
@@ -52,7 +52,8 @@ def student_list(token, class_id):
         "student_id": u.student_id,
         "email": u.email,
         "class_id": u.class_id_id,
-        "state": u.state
+        "state": u.state,
+        "extra": u.extra
     } for u in query]
     return {"status": "ok", "student_list": data}
 
