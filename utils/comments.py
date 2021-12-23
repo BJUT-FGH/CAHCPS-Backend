@@ -1,3 +1,8 @@
+from utils.tools import _generate_comments_intro
+from utils.data.scholarship import learning_award, innovation_award
+from utils.data.credit import check_graduate, check_limited_major_subject_credict, check_arbitrary_major_subject_credict
+
+
 def wisdome_comment(score):
     if score > 95:
         return "你在智育积分上做的非常好，在科研方面可以更有所突出，争取发表顶会，顶刊等。"
@@ -43,11 +48,6 @@ def labor_comment(score):
         return "感谢你对集体，学生们做出的贡献，你在劳育的部分做的非常棒了，希望你能够平衡好学生工作与生活还有学业上的时间。"
     else:
         return "在大学期间可以适当参加学生工作，丰富自己的经历！"
-
-
-
-
-
 
 
 def learning_award_comments(rank):
@@ -99,3 +99,22 @@ def check_arbitrary_major_subject_credict_comments(arbitrary_credit):
         return "你的已修专业任选课的分数为" + str(arbitrary_credit) + "，需要再修" + str(4 - arbitrary_credit) + "学分。"
     else:
         return "你的已修专业任选课的分数为" + str(arbitrary_credit) + "，已满足樊恭烋荣誉学院专业任选课培养计划。"
+
+
+def composite_comments_intro(args):
+    return "北京工业大学樊恭烋荣誉学院" + args['name'] + "同学你好，截止到目前为止你的加权平均分为" + \
+            args['weighted_average_score'] + "。在班级" + args['class_num'] + "人数中的排名第" + args['rank'] + "。"
+
+
+def composite_comments_award(user_id):
+    return learning_award(user_id) + innovation_award(user_id)
+
+
+def composite_comments_credit(user_id):
+    return check_graduate(user_id) + check_limited_major_subject_credict(user_id) + check_arbitrary_major_subject_credict(user_id)
+
+
+def composite_comments(user_id):
+    args_intro = _generate_comments_intro(user_id)
+    intro_comments = composite_comments_intro(args_intro)
+    return intro_comments + composite_comments_award(user_id) + composite_comments_credit(user_id)

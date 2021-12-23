@@ -1,4 +1,5 @@
 from model import *
+from utils.comments import composite_comments
 
 
 def get_user_name(user_id):
@@ -6,7 +7,11 @@ def get_user_name(user_id):
 
 
 def _get_subject_id(subject_name):
-    return Subject.get(Subject.name == subject_name)
+    return Subject.get(Subject.name == subject_name).subject_id
+
+
+def _get_class_from_user(user_id):
+    return User.select().where(User.uid == user_id).class_id
 
 
 def get_subject_score(user_id, subject_name):
@@ -34,6 +39,11 @@ def _calc_weighted_average(all_grade):
     return all_score / all_credit
 
 
+def _get_weighted_average(user_id):
+    all_grade = _get_all_grade_w_weight(user_id)
+    return round(_calc_weighted_average(all_grade), 2)
+
+
 def _calc_credit_from_type(all_grade, type):
     all_credit = 0
     for g in all_grade:
@@ -49,7 +59,7 @@ def _calc_all_credit(all_grade):
     return all_credit
 
 
-def _get_class_user_id(class_id):
+def _get_class_list_user_id(class_id):
     query = User.select().where(User.student_id != "", User.class_id_id == class_id)
     return [{
         "uid": u.uid,
@@ -67,8 +77,8 @@ def _get_all_weighted_average_score(class_user_id):
 
 
 def get_rank_from_class(user_id):
-    class_id = User.select().where(User.uid == user_id)
-    class_user_id = _get_class_user_id(class_id)
+    class_id = _get_class_from_user(user_id)
+    class_user_id = _get_class_list_user_id(class_id)
     class_weighted_average_score_list = _get_all_weighted_average_score(class_user_id)
     class_weighted_average_score_list.sort(reverse=True)
     all_grade = _get_all_grade_w_weight(user_id)
@@ -104,3 +114,22 @@ def get_all_arbitrary_credit(user_id):
     all_grade = _get_all_grade_w_weight(user_id)
     arbitrary_credit = _calc_credit_from_type(all_grade, SubjectType.专业任选课)
     return arbitrary_credit
+
+
+def _get_class_num(class_id):
+    class_user_id = _get_class_list_user_id(class_id)
+    return len(class_user_id)
+
+
+def _generate_comments_intro(user_id):
+    args = {"name":"", "weighted_average_score":"", "class_num":0, "rank":0}
+    args['name'] = get_user_name(user_id)
+    args['weighted_average_score'] = _get_weighted_average(user_id)
+    class_id = _get_class_from_user(user_id)
+    args['class_num'] = _get_class_num(class_id)
+    args['rank'] = get_rank_from_class(user_id)
+    return args
+
+
+def sum_up(user_id):
+    return composite_comments(user_id)
