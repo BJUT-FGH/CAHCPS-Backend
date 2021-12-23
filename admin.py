@@ -81,6 +81,7 @@ def class_list(token):
     data = [{
         "class_id": x.class_id,
         "name": x.name,
+        "student_count": User.select().where(User.class_id == x.class_id).count(),
         "note": x.note
     } for x in query]
     return {"status": "ok", "student_list": data}
