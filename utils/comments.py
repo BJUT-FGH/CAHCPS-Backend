@@ -103,7 +103,7 @@ def check_arbitrary_major_subject_credict_comments(arbitrary_credit):
 
 def composite_comments_intro(args):
     return "北京工业大学樊恭烋荣誉学院" + args['name'] + "同学你好，截止到目前为止你的加权平均分为" + \
-            args['weighted_average_score'] + "。在班级" + args['class_num'] + "人数中的排名第" + args['rank'] + "。"
+            str(args['weighted_average_score']) + "。在班级" + str(args['class_num']) + "人数中的排名第" + str(args['rank']) + "。"
 
 
 def composite_comments_award(user_id):

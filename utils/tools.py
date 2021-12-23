@@ -10,7 +10,7 @@ def _get_subject_id(subject_name):
 
 
 def _get_class_from_user(user_id):
-    return User.select().where(User.uid == user_id).class_id
+    return User.get(User.uid == user_id).class_id
 
 
 def get_subject_score(user_id, subject_name):
@@ -35,6 +35,7 @@ def _calc_weighted_average(all_grade):
             continue
         all_score += g['score'] * g['credit']
         all_credit += g['credit']
+    return 0
     return all_score / all_credit
 
 
@@ -69,7 +70,7 @@ def _get_class_list_user_id(class_id):
 def _get_all_weighted_average_score(class_user_id):
     class_weighted_average_score_list = []
     for user in class_user_id:
-        user_all_grade = _get_all_grade_w_weight(user.uid)
+        user_all_grade = _get_all_grade_w_weight(user['uid'])
         user_weighted_average_score = _calc_weighted_average(user_all_grade)
         class_weighted_average_score_list.append(user_weighted_average_score)
     return class_weighted_average_score_list

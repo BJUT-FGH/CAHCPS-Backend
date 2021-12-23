@@ -40,6 +40,7 @@ def student_advise(token, student_uid):
     a, a_msg = scores.aesthetic_score(2, grade=1)
     l, l_msg = scores.labor_score(is_union_worker=True, is_meida_worker=False, is_class_worker=False, grade=1)
 
+    from utils.comments import composite_comments
     return {
         "status": "ok",
         "advise": {
@@ -48,6 +49,7 @@ def student_advise(token, student_uid):
             "physical": {"score": p, "msg": p_msg},
             "aesthetic": {"score": a, "msg": a_msg},
             "labor": {"score": l, "msg": l_msg},
-        }
+        },
+        "sum_up": composite_comments(student_uid)
     }
 
