@@ -35,7 +35,6 @@ def _calc_weighted_average(all_grade):
             continue
         all_score += g['score'] * g['credit']
         all_credit += g['credit']
-    return 0
     return all_score / all_credit
 
 

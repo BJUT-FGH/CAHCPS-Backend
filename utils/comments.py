@@ -1,7 +1,7 @@
 from utils.tools import _generate_comments_intro
 from utils.data.scholarship import learning_award, innovation_award
 from utils.data.credit import check_graduate, check_limited_major_subject_credict, check_arbitrary_major_subject_credict, check_general_elective_subject_credict
-
+from utils.data.special_comments import *
 
 def wisdome_comment(score):
     if score > 95:
@@ -52,17 +52,17 @@ def labor_comment(score):
 
 def learning_award_comments(rank):
     if rank <= 6:
-        return "你的排名是：" + str(rank) + "你可以获得校学习优秀奖。成绩不错，明年继续加油！"
+        return "你的排名是：{}，你可以获得校学习优秀奖。成绩不错，明年继续加油！{}".format(rank, SCORES_RANK_IN_6)
     else:
         diff = rank - 6
-        return "你的排名是：" + str(rank) + "你离参评校学习优秀奖还差" + str(diff) + "名，明年加油！"
+        return "你的排名是：{}，你离参评校学习优秀奖还差{}名，明年加油！{}".format(rank, diff, SCORES_RANK_OUT_6)
 
 
 def innovation_award_comments(is_award):
     if is_award == True:
-        return "你在本学期可以获得创新创业奖。"
+        return "你在本学期可以获得创新创业奖。{}".format(INNOVATION_IN)
     else:
-        return "你在本学期无法获得创新创业奖，你需要参加学校认定的学科竞赛或者发表论文，专利等。"
+        return "你在本学期无法获得创新创业奖，你需要参加学校认定的学科竞赛或者发表论文，专利等。{}".format(INNOVATION_OUT)
 
 
 def academic_excellence_award_comments(is_award):
@@ -75,42 +75,42 @@ def academic_excellence_award_comments(is_award):
 def compare_subject_comments(user1_name, user2_name, user1_subject_score, user2_subject_score, subject):
     diff = abs(user1_subject_score - user2_subject_score)
     if user1_subject_score < user2_subject_score:
-        return user1_name + subject + "成绩比" + user2_name + "低" + str(diff)
+        return "{}{}成绩比{}低{}".format(user1_name, subject, user2_name, diff)
     else:
-        return user1_name + subject + "成绩比" + user2_name + "高" + str(diff)
+        return "{}{}成绩比{}高{}".format(user1_name, subject, user2_name, diff)
 
 
 def check_graduate_comments(all_credicts):
     if all_credicts >= 172:
-        return "你的已修学分为" + str(all_credicts) + "，可以毕业。"
+        return "你的已修学分为{}，可以毕业。".format(all_credicts)
     else:
-        return "你的已修学分为" + str(all_credicts) + "，不可以毕业，还差" + str(172 - all_credicts) + "学分。"
+        return "你的已修学分为{}，不可以毕业，还差{}学分。".format(all_credicts, 172 - all_credicts)
 
 
 def check_limited_major_subject_credict_comments(limited_credit):
     if limited_credit < 6:
-        return "你的已修专业限选课的学分为" + str(limited_credit) + "，需要再修" + str(6 - limited_credit) + "学分。"
+        return "你的已修专业限选课的学分为{}，需要再修{}学分。".format(limited_credit, 6 - limited_credit)
     else:
-        return "你的已修专业限选课的学分为" + str(limited_credit) + "，已满足樊恭烋荣誉学院专业限选课培养计划。"
+        return "你的已修专业限选课的学分为，已满足樊恭烋荣誉学院专业限选课培养计划。".format(limited_credit)
 
 
 def check_arbitrary_major_subject_credict_comments(arbitrary_credit):
     if arbitrary_credit < 4:
-        return "你的已修专业任选课的学分为" + str(arbitrary_credit) + "，需要再修" + str(4 - arbitrary_credit) + "学分。"
+        return "你的已修专业任选课的学分为{}，需要再修{}学分。".format(arbitrary_credit, 4 - arbitrary_credit)
     else:
-        return "你的已修专业任选课的学分为" + str(arbitrary_credit) + "，已满足樊恭烋荣誉学院专业任选课培养计划。"
+        return "你的已修专业任选课的学分为{}，已满足樊恭烋荣誉学院专业任选课培养计划。".format(arbitrary_credit)
 
 
 def check_general_elective_subject_credict_comments(general_elective_subject_credict):
     if general_elective_subject_credict < 8:
-        return "你的已修通识教育选修课的学分为" + str(general_elective_subject_credict) + "，需要再修" + str(8 - general_elective_subject_credict) + "学分。"
+        return "你的已修通识教育选修课的学分为{}，需要再修{}学分。".format(general_elective_subject_credict, 8 - general_elective_subject_credict)
     else:
-        return "你的已修通识教育选修课的学分为" + str(general_elective_subject_credict) + "，已满足樊恭烋荣誉学院通识教育选修课培养计划。"
+        return "你的已修通识教育选修课的学分为{}，已满足樊恭烋荣誉学院通识教育选修课培养计划。".format(general_elective_subject_credict)
 
 
 def composite_comments_intro(args):
-    return "北京工业大学樊恭烋荣誉学院" + args['name'] + "同学你好，截止到目前为止你的加权平均分为" + \
-            str(args['weighted_average_score']) + "。在班级" + str(args['class_num']) + "人数中的排名第" + str(args['rank']) + "。"
+    return "北京工业大学樊恭烋荣誉学院{}同学你好，截止到目前为止你的加权平均分为{}。在班级{}人数中的排名第{}。".format(args['name'], 
+            args['weighted_average_score'], args['class_num'], args['rank'])
 
 
 def composite_comments_award(user_id):
