@@ -150,6 +150,7 @@ class StudentGradeUploadReq(BaseModel):
     class Item(BaseModel):
         subject_name: str = Query(..., min_length=2, max_length=100)
         subject_type: int = 0
+        subject_credit: float = 0
         score: float
     grade_list: List[Item]
 

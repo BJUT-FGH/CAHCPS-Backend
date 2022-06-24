@@ -33,6 +33,7 @@ def student_advise(token, student_uid):
     if not _has_student_full_permission_r(user, student_uid):
         raise ValueError("permission denied")
 
+    # TODO: this is only a example
     from utils import scores
     w, w_msg = scores.wisdom_score(85, "无", 0, grade=1)
     m, m_msg = scores.moral_score(5, grade=1)
